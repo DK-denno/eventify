@@ -53,8 +53,9 @@ class Venue(models.Model):
         return self.delete()
 
 class statusVenue(models.Model):
-    venue = models.OneToOneField(User,on_delete=models.CASCADE,related_name='status')
-    date = models.DateTimeField(auto_now_add=True)
+    venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='status')
+    date = models.DateTimeField()
+    time = models.CharField(max_length=100)
     booked = models.BooleanField(default=True)
 
     def __str__(self):
@@ -64,6 +65,18 @@ class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='events')
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='events')
     category = models.CharField(max_length=100)
+    venue = models.OneToOneField(User,on_delete=models.CASCADE,related_name='event')
+    dressCode = models.CharField(max_length=200)
+    ticketFee = models.BigIntegerField()
+    paybillNumber = models.BigIntegerField()
+    GOH = models.CharField(max_length=20)
+    MC = models.CharField(max_length=20)
+    Date = models.DateTimeField()
+
+    
 
     def __str__(self):
         return self.user.username
+
+    def saveEvent(self):
+        return self.save()
