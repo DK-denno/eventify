@@ -34,7 +34,7 @@ class Organisation(models.Model):
         return self.name
 
 class Venue(models.Model):
-    organisation = models.OneToOneField(Organisation,on_delete=models.CASCADE,related_name='venue')
+    organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='venue')
     location = models.CharField(max_length=50)
     images1 = models.ImageField(upload_to='images')
     images2 = models.ImageField(upload_to='images')
@@ -65,7 +65,8 @@ class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='events')
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='events')
     category = models.CharField(max_length=100)
-    venue = models.OneToOneField(User,on_delete=models.CASCADE,related_name='event')
+    poster = models.ImageField(upload_to='images',blank=True)
+    venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='event')
     dressCode = models.CharField(max_length=200)
     ticketFee = models.BigIntegerField()
     paybillNumber = models.BigIntegerField()
