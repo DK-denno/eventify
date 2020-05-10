@@ -2,15 +2,22 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a href="/profile">
+    {% if request.user.profile.dp %}
+    <img src="{{request.user.profile.dp.url}}" class="dp" width="70" height="70" alt="">
+    {% else %}
+    <img src="https://image.shutterstock.com/image-vector/young-businessman-avatar-character-260nw-614299763.jpg" width="50" height="50" class="dp" alt="">
+    {% endif %}
+  </a>
+    <a class="navbar-brand" href="">{{request.user.username}}</a>
   
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/">HOME <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="/venues">Venues</a>
         </li>
         <li class="nav-item">
           <a class="nav-link disabled" href="#">Disabled</a>
