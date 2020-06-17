@@ -7,7 +7,7 @@
       <div class="card card-signin my-5">
         <div class="card-body">
           <h5 class="card-title text-center">Log In</h5>
-          <form>
+          <form action="" >
             {% csrf_token %}
             {% bootstrap_form form %}
           </form>
@@ -17,6 +17,9 @@
           <a href="{% url 'social:begin' 'facebook' %}">
               <button class="btn btn-lg btn-facebook btn-block text-uppercase"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
           </a>
+          <a href="{% url 'social:begin' 'github' %}">
+            <button class="btn btn-lg btn-facebook btn-block text-uppercase"><i class="fas fa-github-f mr-2"></i> Sign in with Github</button>
+        </a>
         </div>
       </div>
     </div>

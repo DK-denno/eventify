@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',  
+    'social_django',  #
     'bootstrap4'
     
 ]
@@ -51,7 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <--
 ]
 
 ROOT_URLCONF = 'events.urls'
@@ -67,8 +68,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',  
-                'social_django.context_processors.login_redirect',
+                
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect', # <-
             ],
         },
     },
@@ -85,7 +87,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "events",
         'USER': "root",
-        'PASSWORD': "sibhon",
     }
 }
 
@@ -112,10 +113,9 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
-    'social.backends.google.GoogleOAuth2',
+
     'django.contrib.auth.backends.ModelBackend',
 )
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -149,6 +149,8 @@ LOGIN_REDIRECT_URL = 'home'
 # SOCIAL_AUTH_GITHUB_KEY = '44fd4145a8d85fda4ff1'
 # SOCIAL_AUTH_GITHUB_SECRET = '2de7904bdefe32d315805d3b7daec7906cc0e9e7'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '1945543238909100'
-SOCIAL_AUTH_FACEBOOK_SECRET = '19cb73231a558110e3d1f5dbea06dbf7'
+SOCIAL_AUTH_FACEBOOK_KEY = '536361140103864'
+SOCIAL_AUTH_FACEBOOK_SECRET = '5b70a6fe893141f956a4f853d49dd48d'
 
+SOCIAL_AUTH_GITHUB_KEY = 'd799956498fe5bdd6663'
+SOCIAL_AUTH_GITHUB_SECRET = 'b8d9d84051722855119f575917049b42ebe611b7'
