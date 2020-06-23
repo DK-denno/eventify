@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
+<h2>event</h2>
+  <p>Hello {{ user.username }}!</p>
+
+ <div class="row">
+
+    <div class="col-md-6">
+        <img src="{{event.poster.url}}" width="500" height="500" alt="">
+    </div>
+    <div class="col-md-6">
+            Event details go here
+    </div>
+
+ </div>
+
+
+  {% endblock  %}
