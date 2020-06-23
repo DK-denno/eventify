@@ -65,7 +65,8 @@ class statusVenue(models.Model):
 class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='events')
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='events')
-    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
     tickets = models.BigIntegerField()
 
     def __str__(self):
