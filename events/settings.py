@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from decouple import config,Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '0d=78qr-j41+o-6nkge++e@dlq)vu280yyes2+uoozuqa!9@+h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',  
-    'bootstrap4'
+    'bootstrap4',
+    'mpesa_api.core',
+    'mpesa_api.util',
     
 ]
 
@@ -51,7 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <--
 ]
 
 ROOT_URLCONF = 'events.urls'
@@ -67,8 +71,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',  
-                'social_django.context_processors.login_redirect',
+                
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect', # <-
             ],
         },
     },
@@ -85,7 +90,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "events",
         'USER': "root",
-        'PASSWORD': "sibhon",
     }
 }
 
@@ -112,10 +116,9 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
-    'social.backends.google.GoogleOAuth2',
+
     'django.contrib.auth.backends.ModelBackend',
 )
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -142,6 +145,7 @@ STATICFILES_DIRS = [
 ###########
 
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 # SOCIAL_AUTH_TWITTER_KEY = '9TD12xahCWCDdyLzpmw61GSM9'
 # SOCIAL_AUTH_TWITTER_SECRET = 'mwtdcUe4uOvvJjDk2AuQ9Mq2xiHPw3740m5iGLf6hwg3B4TNSx'
@@ -149,6 +153,59 @@ LOGIN_REDIRECT_URL = 'home'
 # SOCIAL_AUTH_GITHUB_KEY = '44fd4145a8d85fda4ff1'
 # SOCIAL_AUTH_GITHUB_SECRET = '2de7904bdefe32d315805d3b7daec7906cc0e9e7'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '1945543238909100'
-SOCIAL_AUTH_FACEBOOK_SECRET = '19cb73231a558110e3d1f5dbea06dbf7'
+SOCIAL_AUTH_FACEBOOK_KEY = '536361140103864'
+SOCIAL_AUTH_FACEBOOK_SECRET = '5b70a6fe893141f956a4f853d49dd48d'
 
+SOCIAL_AUTH_GITHUB_KEY = 'd799956498fe5bdd6663'
+SOCIAL_AUTH_GITHUB_SECRET = 'b8d9d84051722855119f575917049b42ebe611b7'
+
+
+
+
+######## C2B MPESA DETAILS.#########
+
+#Consumer Secret
+MPESA_C2B_ACCESS_KEY = config('MPESA_C2B_ACCESS_KEY'),
+# Consumer Key
+MPESA_C2B_CONSUMER_SECRET = config('MPESA_C2B_CONSUMER_SECRET'),
+# Url for registering your paybill replace it the url you get from safaricom after you have passed the UATS
+C2B_REGISTER_URL = config('C2B_REGISTER_URL'),
+#ValidationURL
+# replace http://mpesa.ngrok.io/ with your url ow here this app is running
+C2B_VALIDATE_URL = config('C2B_VALIDATE_URL'),
+#ConfirmationURL
+# replace http://mpesa.ngrok.io/ with your url ow here this app is running
+C2B_CONFIRMATION_URL = config('C2B_CONFIRMATION_URL'),
+#ShortCode (Paybill)
+C2B_SHORT_CODE = config('C2B_SHORT_CODE'),
+#ResponseType
+C2B_RESPONSE_TYPE = config('C2B_RESPONSE_TYPE'),
+
+# C2B (STK PUSH) Configs
+# https://developer.safaricom.co.ke/lipa-na-m-pesa-online/apis/post/stkpush/v1/processrequest
+
+# Url for sending the STK push request replace it the url you get from safaricom after you have passed the UATS
+C2B_ONLINE_CHECKOUT_URL = config('C2B_ONLINE_CHECKOUT_URL'),
+# Where the Mpesa will post the response
+#replace http://mpesa.ngrok.io/ with your url ow here this app is running
+C2B_ONLINE_CHECKOUT_CALLBACK_URL = config('C2B_ONLINE_CHECKOUT_CALLBACK_URL'),
+# TransactionType
+C2B_TRANSACTION_TYPE = config('C2B_TRANSACTION_TYPE'),
+# The Pass Key provided by Safaricom when you pass UAT's
+# See https://developer.safaricom.co.ke/test_credentials
+C2B_ONLINE_PASSKEY = config('C2B_ONLINE_PASSKEY'),
+# Your Paybill
+C2B_ONLINE_SHORT_CODE = config('C2B_ONLINE_SHORT_CODE'),
+
+# URL generate OAUTH token
+# See https://developer.safaricom.co.ke/oauth/apis/get/generate-1
+GENERATE_TOKEN_URL = config('GENERATE_TOKEN_URL'),
+
+
+# number of seconds from the expiry we consider the token expired the token expires after an hour
+# so if the token is 600 sec (10 minutes) to expiry we consider the token expired.
+TOKEN_THRESHOLD = 600
+
+...
+#CELERY SETTINGS
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
