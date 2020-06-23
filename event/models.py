@@ -56,19 +56,22 @@ class Venue(models.Model):
 
 class statusVenue(models.Model):
     venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='status')
-    date = models.DateTimeField()
+    start = models.DateTimeField()
+    stop = models.DateTimeField()
     time = models.CharField(max_length=100)
     booked = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.venue
+        return self.venue.name
 
 class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='events')
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='events')
-    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=400,default="no description")
     poster = models.ImageField(upload_to='images',blank=True)
     venue = models.ForeignKey(Venue,on_delete=models.CASCADE,related_name='event')
+    statusVenue = models.ForeignKey(statusVenue,on_delete=models.CASCADE,related_name="event")
     dressCode = models.CharField(max_length=200)
     ticketFee = models.BigIntegerField()
     paybillNumber = models.BigIntegerField()
@@ -83,3 +86,58 @@ class Event(models.Model):
 
     def saveEvent(self):
         return self.save()
+
+class Posters(models.Model):
+    poster = models.ImageField(upload_to='images',blank=True)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='events_poster')
+
+    def __str__(self):
+        return self.event
+
+    def saveEvent(self):
+        return self.save()
+
+
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        abstract = True
+# M-pesa Payment models
+class MpesaCalls(BaseModel):
+    ip_address = models.TextField()
+    caller = models.TextField()
+    merchant_id = models.TextField(null=False,default="")
+    checkout_request_id=models.TextField(null=False,default="")
+    conversation_id = models.TextField()
+    content = models.TextField()
+    class Meta:
+        verbose_name = 'Mpesa Call'
+        verbose_name_plural = 'Mpesa Calls'
+
+class MpesaCallBacks(BaseModel):
+    ip_address = models.TextField()
+    caller = models.TextField() 
+    merchant_id = models.TextField(null=False,default="")
+    checkout_request_id=models.TextField(null=False,default="")
+    conversation_id = models.TextField()
+    content = models.TextField()
+    class Meta:
+        verbose_name = 'Mpesa Call Back'
+        verbose_name_plural = 'Mpesa Call Backs'
+
+class MpesaPayment(BaseModel):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
+    type = models.TextField()
+    reference = models.TextField()
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.TextField()
+    organization_balance = models.DecimalField(max_digits=10, decimal_places=2)
+    class Meta:
+        verbose_name = 'Mpesa Payment'
+        verbose_name_plural = 'Mpesa Payments'
+    def __str__(self):
+        return self.first_name     

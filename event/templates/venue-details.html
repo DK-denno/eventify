@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+<body id="bg">
+<div class="page-wraper">
+	<!-- Header Top ==== -->
+
+   <!-- navigation here -->
+
+    <!-- Content -->
+    <div class="page-content bg-white">
+        <!-- inner page banner -->
+        <div class="page-banner ovbl-dark" style="background-image:url(https://cdn.pixabay.com/photo/2016/11/09/21/28/exclusive-banquet-1812772_960_720.jpg);">
+            <div class="container">
+                <div class="page-banner-entry">
+                    <h1 class="text-white">Venue Details</h1>
+				 </div>
+            </div>
+        </div>
+		<!-- Breadcrumb row -->
+		<div class="breadcrumb-row">
+			<div class="container">
+				<ul class="list-inline">
+					<li><a href="#">Home</a></li>
+					<li>Venue Details</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Breadcrumb row END -->
+        <!-- inner page banner END -->
+		<div class="content-block">
+            <!-- About Us -->
+			<div class="section-area section-sp1">
+                <div class="container">
+					 <div class="row">
+						<div class="col-lg-8 col-md-7 col-sm-12">
+							<div class="courses-post">
+								<div class="ttr-post-media media-effect">
+									<a href="#"><img src="{{venue.images1.url}}" alt="{{venue.name}}"></a>
+								</div>
+								<div class="ttr-post-info">
+									<div class="ttr-post-title ">
+										<h2 class="post-title">{{venue.name}}</h2>
+									</div>
+									<div class="ttr-post-text">
+										<div class="event-info">
+                                            <h4 class="event-title"><a>{{event.name}}</a></h4>
+                                            <ul class="media-post">
+                                              <li><a><i class="fa fa-map-marker"></i> {{venue.location}}, Kenya</a></li>
+                                            </ul>
+                                            <p> {{event.description}} </p>
+                                          </div>
+										<div class="row">
+											<div class="col-md-6">
+												<img src="{{venue.images1.url}}" width="250" height="150" alt="{{venue.name}}">
+											</div>
+											
+											<div class="col-md-6">
+												<img src="{{venue.images2.url}}" width="250" height="150" alt="{{venue.name}}">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="courese-overview" id="overview">
+								<div class="row">
+							
+									<div class="col-md-12 col-lg-7">
+										<h5 class="m-b5">Venue Description</h5>
+										<p>{{venue.description}}</p>
+									
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-5 col-sm-12 m-b30">
+							<div class="bg-primary text-white contact-info-bx m-b30">
+								<h2 class="m-b10 title-head">Venue <span>Details</span></h2>
+								<p>
+									<b>Organisation</b> :{{venue.organisation}}<br>
+									<b>Email</b> : {{venue.user.email}}<br>
+                                    <b>Name</b> : {{venue.name}}<br>
+                                    <b>Book Fee</b> : {{venue.price}}<br>
+									
+									
+								</p>
+								<div class="row">
+									<a class="btn flex-fill m-l5 google-plus" href="/bookVenue/{{venue.id}}"><i class="fa fa-money"></i>   Buy Venue</a>
+								</div>
+								<div class="widget widget_getintuch">	
+									<ul>
+										<li><i class="fa fa-map-marker"></i>{{venue.location}}, Kenya</li>
+										<li><i class="fa fa-phone"></i> {{ venue.organisation.user.profile.phone_number }} </li>
+										<li><i class="fa fa-envelope"></i>{{venue.organisation.user.email}}</li>
+									</ul>
+								</div>
+							
+								<h5 class="m-t0 m-b20">Follow Us</h5>
+								<ul class="list-inline contact-social-bx">
+									<li><a href="https://facebook.com" class="btn outline radius-xl"><i class="fa fa-facebook"></i></a></li>
+									<li><a href="https://twitter.com" class="btn outline radius-xl"><i class="fa fa-twitter"></i></a></li>
+									<li><a href="https://instagram.com" class="btn outline radius-xl"><i class="fa fa-instagram"></i></a></li>
+									<li><a href="https://instagram.com" class="btn outline radius-xl"><i class="fa fa-instagram"></i></a></li>
+								</ul>
+							</div>
+							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.8122913518932!2d36.81474831475399!3d-1.286694499061527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10c55202d22b%3A0x9476f14fd49cde4d!2sKenyatta%20Ave%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1588785287755!5m2!1sen!2ske" class="align-self-stretch d-flex" style="width:100%; min-width:100%; min-height:400px;" allowfullscreen></iframe>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+
+{% endblock %}
