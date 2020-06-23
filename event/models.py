@@ -21,8 +21,10 @@ class Profile(models.Model):
 
 class Organisation(models.Model):
     admin = models.ForeignKey(User,on_delete=models.CASCADE,related_name='organisation')
+    logo =  models.ImageField(upload_to='images/logos')
     name = models.CharField(max_length=500)
     email = models.EmailField(max_length=500)
+    paybill = models.BigIntegerField()
     
     def save_organisation(self):
         return self.save()
@@ -64,6 +66,14 @@ class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='events')
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='events')
     category = models.CharField(max_length=100)
+    tickets = models.BigIntegerField()
 
     def __str__(self):
         return self.user.username
+
+class poster(models.Model):
+    poster = models.ImageField(upload_to='images/logos')
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='posters')
+
+    def __str__(self):
+        return self.event.name
