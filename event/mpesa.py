@@ -5,8 +5,8 @@ from datetime import datetime
 import base64
 
 class MpesaC2bCredential:
-    consumer_key = 'wWXruSHVkm5ye7R2sVCFQ08zv7wNdc2q'
-    consumer_secret = 'IWI63auaCuzIJIZY'
+    consumer_key = 'OTJLOeEfltgiUz7cT12uOQW18D1LiIvM'
+    consumer_secret = '9iUbOofNATujwk4A'
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 class MpesaAccessToken:
     r = requests.get(MpesaC2bCredential.api_URL,

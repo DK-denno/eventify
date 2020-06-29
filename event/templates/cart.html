@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+
+    {% if items %}
+    <div class="container">
+        {% for item in items %}
+        <div class="row">
+           <div class="col-md-1">
+             
+           </div>
+           <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="{{item.event.poster.url}}" alt="">
+                </div>
+                <div class="col-md-5">
+                    <b>{{item.event.name}}<b><br>
+                        <small>{{item.event.description}}</small>
+                    </b>
+                </div>
+                <div class="col-md-1">
+                   <a href="/remove-cart/{{item.id}}" style="margin-left: -70px;" >
+                       <i class="fas fa-trash" >Remove</i>
+                   </a>
+                </div>
+                <div class="col-md-2" >
+                    <p style="margin-bottom: -10px;">Price:{{item.event.ticketFee}}/=</p>
+                </div>
+            </div>
+           </div>
+           <div class="col-md-2"></div>
+       </div>
+       <br>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-2">
+                Total: {{total}}/=
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-success my-2 my-sm-0"> CHECKOUT </button>
+            </div>
+        </div>
+       </div>
+   
+       <br><br>
+       {% else %}
+       <h1>YOUR CART IS EMPTY</h1><BR><BR><BR><BR>
+    {% endif %}
+
+{% endblock  %}

@@ -37,6 +37,7 @@ class Organisation(models.Model):
 
 class Venue(models.Model):
     organisation = models.ForeignKey(Organisation,on_delete=models.CASCADE,related_name='venue')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='venues')
     location = models.CharField(max_length=50)
     images1 = models.ImageField(upload_to='images')
     images2 = models.ImageField(upload_to='images')
@@ -141,3 +142,14 @@ class MpesaPayment(BaseModel):
         verbose_name_plural = 'Mpesa Payments'
     def __str__(self):
         return self.first_name     
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='cart')
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='event_cart')
+
+    def __str__(self):
+        return self.user.username    
+    
+    def remove(self):
+        return self.delete()

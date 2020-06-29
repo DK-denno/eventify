@@ -9,7 +9,7 @@
     <img src="https://image.shutterstock.com/image-vector/young-businessman-avatar-character-260nw-614299763.jpg" width="50" height="50" class="dp" alt="">
     {% endif %}
   </a>
-    <a class="navbar-brand" href="">{{request.user.username}}</a>
+  <a class="navbar-brand" href="/profile">{{request.user.username}}</a>
   
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -23,6 +23,9 @@
           <a class="nav-link disabled" href="#">Disabled</a>
         </li>
       </ul>
+      <ul style="margin-right:30px;" >
+        <a class="nav-item" href="/view-cart"><i class="fas fa-shopping-cart" >View Cart</i></a>
+      </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -30,3 +33,12 @@
     </div>   
 </nav>
 <br><br>
+
+
+<style>
+  .dp{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+</style>
