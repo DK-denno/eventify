@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import Profile,Event,Venue,Organisation,Cart
+from .models import Profile,Event,Venue,Organisation,Cart,Tickets
 from .forms import ProfileForm,EventForm
 import json
 from mpesa_api.core.mpesa import Mpesa
@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .mpesa import *
 from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse, JsonResponse
+import random
+import string
 
 
 # Create your views here.
@@ -72,3 +74,15 @@ def removeCart(request,pk):
     item = Cart.objects.get(id=pk)
     item.remove()
     return redirect("/view-cart")
+
+def testEmail(request):
+    return render(request,"email/email.html",{})
+
+
+
+def checkout_ticket(request,event):
+    allowed_chars = ''.join((string.ascii_letters, string.digits))
+    unique_id = ''.join(random.choice(allowed_chars) for _ in range(32))
+    ticket = Tickets(user=request.user,event=event,ticketNumber=unique_id)
+    ticket.save()
+    return ticket

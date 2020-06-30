@@ -10,7 +10,9 @@ urlpatterns = [
     path("venues/",views.venues,name="venues"),
     path("venues/<int:pk>/",views.viewVenue,name="viewVenue"),
     path("view-cart/",views.viewCart,name="view-cart"),    
-    path("remove-cart/<int:pk>/",views.removeCart,name="remove-cart"),    
+    path("remove-cart/<int:pk>/",views.removeCart,name="remove-cart"),
+    path("testEmail",views.testEmail,name="testEmail"),    
+    
 ]
 
 

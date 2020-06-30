@@ -75,6 +75,7 @@ class Event(models.Model):
     statusVenue = models.ForeignKey(statusVenue,on_delete=models.CASCADE,related_name="event")
     dressCode = models.CharField(max_length=200)
     ticketFee = models.BigIntegerField()
+    tickets = models.BigIntegerField()
     paybillNumber = models.BigIntegerField()
     GOH = models.CharField(max_length=20)
     MC = models.CharField(max_length=20)
@@ -153,3 +154,13 @@ class Cart(models.Model):
     
     def remove(self):
         return self.delete()
+
+class Tickets(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='tickets')
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='event_ticket')
+    ticketNumber = models.CharField(max_length=30)
+    active = models.CharField(max_length=5,default="true")
+
+
+    def __str__(self):
+        return self.user.username    
