@@ -51,7 +51,7 @@
 											<div class="col-md-6">
 												<img src="{{event.venue.images1.url}}" width="150" height="150" alt="{{event.venue.name}}">
 											</div>
-											
+
 											<div class="col-md-6">
 												<img src="{{event.venue.images2.url}}" width="150" height="150" alt="{{event.venue.name}}">
 											</div>
@@ -61,11 +61,11 @@
 							</div>
 							<div class="courese-overview" id="overview">
 								<div class="row">
-							
+
 									<div class="col-md-12 col-lg-7">
 										<h5 class="m-b5">Event Description</h5>
 										<p>{{event.description}}</p>
-									
+
 									</div>
 								</div>
 							</div>
@@ -84,19 +84,23 @@
 									<b>Ticket Fee</b> : {{event.ticketFee}}<br>
 									<b>Guest Of Honor</b> : {{event.GOH}}<br>
 									<b>Hype Beast</b> : {{event.MC}}<br>
-									
+
 								</p>
 								<div class="row">
-									<a class="btn flex-fill m-l5 google-plus" href="/stkpush/{{event.id}}"><i class="fa fa-money"></i>   Buy Ticket</a>
+									<a class="btn flex-fill m-l5 google-plus" href="/addToCart/{{event.id}}"><i class="fa fa-shopping-cart"></i>   Add To cart Ticket</a>
 								</div>
-								<div class="widget widget_getintuch">	
+								<br>
+								<div class="row">
+									<a class="btn flex-fill m-l5 google-plus" href="/buyTicket/{{event.id}}"><i class="fa fa-money"></i>   Buy Ticket</a>
+								</div>
+								<div class="widget widget_getintuch">
 									<ul>
 										<li><i class="fa fa-map-marker"></i>{{event.venue.location}}, Kenya</li>
-										<li><i class="fa fa-phone"></i> {{ event.useruser.profile.phone_number }} </li>
-										<li><i class="fa fa-envelope"></i>{{event.user.email}}</li>
+										<li><i class="fa fa-phone"></i> {{ event.user.profile.phone_number }} </li>
+										<li><i class="fa fa-envelope"></i>{{ event.user.email }}</li>
 									</ul>
 								</div>
-							
+
 								<h5 class="m-t0 m-b20">Follow Us</h5>
 								<ul class="list-inline contact-social-bx">
 									<li><a href="https://facebook.com" class="btn outline radius-xl"><i class="fa fa-facebook"></i></a></li>
@@ -111,5 +115,7 @@
 				</div>
             </div>
         </div>
-
+</div>
+</div>
+</body>
 {% endblock %}

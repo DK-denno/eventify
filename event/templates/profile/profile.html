@@ -1,8 +1,146 @@
 {% extends 'base/baseprof.html' %}
 {% load bootstrap4 %}
 {% load static %}
+
 {% block content %}
+<div class='row'>
 
 
+    <div class="col-md-4">
+        {% if request.user.profile.dp %}
+        <img src="{{request.user.profile.dp.url}}" id="prof" style="border-radius: 50%;" width='250' height='250' alt="">
+        {% else %}
+        <img src="https://www.w3schools.com/howto/img_avatar.png" width='250' height='250' style="border-radius: 50%;"  id="prof" alt="">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="row" style="margin-top:10px;">
+            <div class="col-md-1">
+                <h2> {{request.user.username}}</h2>
+            </div><br><br>{% autoescape on %}<br>{{request.user.profile.bio|safe}} {% endautoescape %}
+        </div>
+        <div class="row">
+
+            <div class="col-md-5">
+                <button class="btn btn-outline-primary" data-toggle="modal" data-target="#profile" >Update Profile</button>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <!-- <button class="btn btn-outline-primary" data-toggle="modal" data-target="#jobs" >Post job</button> -->
+            </div>
+        </div>
+
+        </div>
+
+    </div>
+</div>
+<br><br>
+<div class="container">
+{% if events %}
+<div class="row">
+    {% for event in events %}
+    <div class='col-md-4'>
+        <div class="card" style="width: 18rem;">
+            <img src="{{event.poster.url}}" width="287" height="180" alt="" srcset="">
+
+            <div class="card-body">
+              <h5 class="card-title">{{event.name}}</h5>
+              <p class="card-text">{{event.description}}</p>
+              <a href="/event/{{event.id}}" class="btn btn-primary">View Event</a>
+            </div>
+          </div>
+    </div>
+    <br><br><br>
+
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-4"><img width="200" height="200" src="https://images.unsplash.com/photo-1544654262-e295983be0f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+            <div class="col-md-4"><img width="200" height="200" src="https://images.unsplash.com/photo-1544694916-eb0f093cec92?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+            <div class="col-md-4"><img  width="200" height="200" src="https://images.unsplash.com/photo-1544682236-173a9a707e68?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4"><img width="200" height="200" src="https://images.unsplash.com/photo-1544695526-595de066b315?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+            <div class="col-md-4"><img width="200" height="200" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" alt=""></div>
+            <div class="col-md-4"><img  width="200" height="200" src="https://images.unsplash.com/photo-1544686148-6cefad713f5d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4"><img width="200" height="200" src="https://images.unsplash.com/photo-1544662000-42e2466e7208?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+            <div class="col-md-4"><img width="200" height="200" src="https://images.unsplash.com/photo-1544681280-d25a782adc9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+            <div class="col-md-4"><img  width="200" height="200" src="https://images.unsplash.com/photo-1544694310-9106d1743bc6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt=""></div>
+        </div>
+        <br>
+
+    </div>
+    <div class="col-md-2"></div>
+</div>
+{% endif %}
+</div>
+<div class="modal fade" id="profile" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">UPDATE PROFILE</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="{%url 'profile' %}" method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
+
+                    {% bootstrap_form prof%}
+                    <div class="row">
+                        <input type="submit" class="btn btn-primary btn-lg" value="Post">
+                    </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="jobs" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">POST JOB</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="{%url 'profile' %}" method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
+
+                    {% bootstrap_form eventForm%}
+                    <div class="row">
+                        <input type="submit" class="btn btn-primary btn-lg" value="Post">
+                    </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
