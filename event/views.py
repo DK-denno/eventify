@@ -191,3 +191,37 @@ def confirmation(request):
     transaction = Transactions(status=mpesa_payment['Body']['stkCallback']['ResultDesc'])
     print("failed")
     return redirect("/")
+
+def cart_checkout(request):
+    total=0
+    items = Cart.objects.filter(user=request.user)
+    for item in items:
+        total = total+item.event.ticketFee
+    access_token = getAccessToken()
+    print(sanitiseNumber(request.user.profile.phone_number))
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    headers = {"Authorization": "Bearer %s" % access_token}
+    stkPushrequest = {
+        "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
+        "Password": LipanaMpesaPpassword.decode_password,
+        "Timestamp": LipanaMpesaPpassword.lipa_time,
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": total,
+        "PartyA": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
+        "PartyB": LipanaMpesaPpassword.Business_short_code, #587568
+        "PhoneNumber": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
+        "CallBackURL": "https://chainchain.herokuapp.com/confirmation/",
+        "AccountReference": str(request.user.username),
+        "TransactionDesc": "Testing stk push"
+    }
+    response = requests.post(api_url, json=stkPushrequest, headers=headers)
+    print("statuscode: "+str(response.status_code))
+    if response.status_code==200:
+        data = response.json()
+        if 'ResponseCode' in data.keys():
+            if data['ResponseCode']==0:
+                merchant_id = data['MerchantRequestID']
+        pass
+    merchant_id = response
+    print(response.json())
+    return redirect("/")
