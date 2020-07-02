@@ -8,14 +8,14 @@ class Profile(models.Model):
     dp =  models.ImageField(upload_to='images')
     bio = models.CharField(max_length=500)
     phone_number = models.BigIntegerField(null=True)
-    
-    
+
+
     def save_profile(self):
         return self.save()
 
     def delete_profile(self):
         return self.delete()
-    
+
     def __str__(self):
         return self.user.username
 
@@ -25,13 +25,13 @@ class Organisation(models.Model):
     name = models.CharField(max_length=500)
     email = models.EmailField(max_length=500)
     paybill = models.BigIntegerField()
-    
+
     def save_organisation(self):
         return self.save()
 
     def delete_organisation(self):
         return self.delete()
-    
+
     def __str__(self):
         return self.name
 
@@ -45,13 +45,13 @@ class Venue(models.Model):
     description = models.CharField(max_length=200)
     price = models.BigIntegerField()
     paybillNumber = models.BigIntegerField()
-    
+
     def __str__(self):
         return self.organisation.name
-    
+
     def saveVenue(self):
         return self.save()
-    
+
     def deleteVenue(self):
         return self.delete()
 
@@ -81,7 +81,7 @@ class Event(models.Model):
     MC = models.CharField(max_length=20)
     Date = models.DateTimeField()
 
-    
+
 
     def __str__(self):
         return self.user.username
@@ -119,7 +119,7 @@ class MpesaCalls(BaseModel):
 
 class MpesaCallBacks(BaseModel):
     ip_address = models.TextField()
-    caller = models.TextField() 
+    caller = models.TextField()
     merchant_id = models.TextField(null=False,default="")
     checkout_request_id=models.TextField(null=False,default="")
     conversation_id = models.TextField()
@@ -142,7 +142,7 @@ class MpesaPayment(BaseModel):
         verbose_name = 'Mpesa Payment'
         verbose_name_plural = 'Mpesa Payments'
     def __str__(self):
-        return self.first_name     
+        return self.first_name
 
 
 class Cart(models.Model):
@@ -150,17 +150,29 @@ class Cart(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='event_cart')
 
     def __str__(self):
-        return self.user.username    
-    
+        return self.user.username
+
     def remove(self):
         return self.delete()
 
 class Tickets(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='tickets')
     event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='event_ticket')
-    ticketNumber = models.CharField(max_length=30)
+    ticketNumber = models.CharField(max_length=50)
     active = models.CharField(max_length=5,default="true")
 
 
     def __str__(self):
-        return self.user.username    
+        return self.user.username
+
+class Transactions(models.Model):
+    phone = models.BigIntegerField(null=True)
+    amount = models.BigIntegerField(null=True)
+    MpesaReceipt = models.CharField(max_length=30,null=True)
+    date = models.DateField(auto_now_add=True)
+    checkoutRequestId = models.CharField(max_length=50,null=True)
+    status = models.CharField(max_length=10)
+    direction = models.CharField(max_length=3)
+
+    def __str__(self):
+        return self.status
