@@ -87,7 +87,6 @@ def checkout_ticket(request,event):
     ticket.save()
     return ticket
 
-
 def getAccessToken():
     consumer_key = 'YR6ZT25vHEXOhwBpjOaXOemjE88PGGQp'
     consumer_secret = 'kwMf8UX2hAgEljk5'
@@ -105,8 +104,6 @@ def sanitiseNumber(phone):
         return int(string_number)
     return phone
 
-
-
 def lipa_na_mpesa_online(request,pk):
     event = Event.objects.get(id=pk)
     checkout_ticket(request,event)
@@ -119,7 +116,7 @@ def lipa_na_mpesa_online(request,pk):
         "Password": LipanaMpesaPpassword.decode_password,
         "Timestamp": LipanaMpesaPpassword.lipa_time,
         "TransactionType": "CustomerPayBillOnline",
-        "Amount": 1,
+        "Amount": event.ticketFee,
         "PartyA": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
         "PartyB": LipanaMpesaPpassword.Business_short_code, #587568
         "PhoneNumber": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
