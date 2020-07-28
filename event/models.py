@@ -161,6 +161,8 @@ class Tickets(models.Model):
     ticketNumber = models.CharField(max_length=50)
     active = models.CharField(max_length=5,default="true")
 
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return self.user.username

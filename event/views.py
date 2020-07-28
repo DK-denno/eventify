@@ -9,13 +9,17 @@ from django.views.decorators.csrf import csrf_exempt
 from .mpesa import *
 from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
 import random
 import string
+from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
 
 
 # Create your views here.
 
-
+confirmation_url = "http://6ca54b928b43.ngrok.io/confirmation/"
+validation_url = "http://6ca54b928b43.ngrok.io/validation/"
 @login_required
 def index(request):
     try:
@@ -79,14 +83,6 @@ def testEmail(request):
     return render(request,"email/email.html",{})
 
 
-
-def checkout_ticket(request,event):
-    allowed_chars = ''.join((string.ascii_letters, string.digits))
-    unique_id = ''.join(random.choice(allowed_chars) for _ in range(32))
-    ticket = Tickets(user=request.user,event=event,ticketNumber=unique_id)
-    ticket.save()
-    return ticket
-
 def getAccessToken():
     consumer_key = 'YR6ZT25vHEXOhwBpjOaXOemjE88PGGQp'
     consumer_secret = 'kwMf8UX2hAgEljk5'
@@ -106,7 +102,7 @@ def sanitiseNumber(phone):
 
 def lipa_na_mpesa_online(request,pk):
     event = Event.objects.get(id=pk)
-    checkout_ticket(request,event)
+    # checkout_ticket(request,event)
     access_token = getAccessToken()
     print(sanitiseNumber(request.user.profile.phone_number))
     api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -120,18 +116,21 @@ def lipa_na_mpesa_online(request,pk):
         "PartyA": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
         "PartyB": LipanaMpesaPpassword.Business_short_code, #587568
         "PhoneNumber": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
-        "CallBackURL": "https://chainchain.herokuapp.com/confirmation/",
+        "CallBackURL": "http://6ca54b928b43.ngrok.io/confirmation/",
         "AccountReference": str(request.user.username),
-        "TransactionDesc": "Testing stk push"
+        "TransactionDesc": event.name
     }
     response = requests.post(api_url, json=stkPushrequest, headers=headers)
     print("statuscode: "+str(response.status_code))
     if response.status_code==200:
         data = response.json()
-        if 'ResponseCode' in data.keys():
-            if data['ResponseCode']==0:
-                merchant_id = data['MerchantRequestID']
-        pass
+        print(data["ResponseCode"])
+        if data["ResponseCode"] == '0':
+            print(data["MerchantRequestID"])
+            merchant_id = data['MerchantRequestID']
+            ticket = Tickets(user=request.user,event=event,ticketNumber=data['MerchantRequestID'])
+            ticket.save()
+            print("good")
     merchant_id = response
     print(response.json())
     return redirect("/")
@@ -143,13 +142,14 @@ def register_urls(request):
     headers = {"Authorization": "Bearer %s" % access_token}
     options = {"ShortCode": LipanaMpesaPpassword.Business_short_code,
                "ResponseType": "Completed",
-               "ConfirmationURL": "https://chainchain.herokuapp.com//confirmation/",
-               "ValidationURL": "https://chainchain.herokuapp.com/validation/"}
+               "ConfirmationURL": "http://6ca54b928b43.ngrok.io/confirmation/",
+               "ValidationURL": "http://6ca54b928b43.ngrok.io/validation"}
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 @csrf_exempt
 def call_back(request):
-    pass
+    print(request.body)
+    return redirect("/")
 @csrf_exempt
 def validation(request):
     context = {
@@ -173,7 +173,7 @@ def confirmation(request):
         }
         return JsonResponse(dict(context))
     # print(mpesa_payment['Body']['stkCallback']['CallbackMetadata']['Item'][0]['Value'])
-    if mpesa_payment['Body']['stkCallback']['ResultCode']==0:
+    if mpesa_payment['Body']['stkCallback']['ResultCode']==0 and mpesa_payment['Body']['stkCallback']['CallbackMetadata']['Item'][1]['Value'] :
         print(request.user)
         transaction = Transactions(
            phone = mpesa_payment['Body']['stkCallback']['CallbackMetadata']['Item'][4]['Value'],
@@ -184,6 +184,8 @@ def confirmation(request):
            direction="in"
        )
         transaction.save()
+        user = Tickets.objects.get(ticketNumber=mpesa_payment["Body"]["stkCallback"]["MerchantRequestID"])
+        send_email(user.user,mpesa_payment["Body"]["stkCallback"]["MerchantRequestID"])
         return redirect("/")
     transaction = Transactions(status=mpesa_payment['Body']['stkCallback']['ResultDesc'])
     print("failed")
@@ -207,7 +209,7 @@ def cart_checkout(request):
         "PartyA": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
         "PartyB": LipanaMpesaPpassword.Business_short_code, #587568
         "PhoneNumber": sanitiseNumber(request.user.profile.phone_number),  # replace with your phone number to get stk push
-        "CallBackURL": "https://chainchain.herokuapp.com/confirmation/",
+        "CallBackURL": "http://6ca54b928b43.ngrok.io/confirmation/",
         "AccountReference": str(request.user.username),
         "TransactionDesc": "Testing stk push"
     }
@@ -222,3 +224,19 @@ def cart_checkout(request):
     merchant_id = response
     print(response.json())
     return redirect("/")
+
+def send_email(user,merchant_id):
+    print(request.user.email)
+    ticket = Ticket.object.get(ticketNumber=merchant_id)
+    event = ticket.event
+    ticket = Tickets.objects.filter(user=request.user,event=event).first()
+    print(ticket)
+    email_subject = 'PURCHASE FOR {} event TICKET'.format(event.name)
+    message = render_to_string('email/email.html', {
+        'user': user,
+        'event':event,
+        'ticket':ticket,
+    })
+    email = EmailMessage(email_subject, message, to=[request.user.email])
+    email.send()
+    return redirect('/')

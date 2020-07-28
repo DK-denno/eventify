@@ -1,37 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% autoescape off %}
+Hi <h2>{{user.username}}</h2>,<br><br>
+Your payment for the {{event.name}} has been recieved and processed,<br>
+Your ticket number is : {{ticket.ticketNumber}}
+Please carry your soft ticket with yu as proof of payment.
+We hope to see you there.
+<img src="{{event.poster}}" alt="" width="200" height="200">
 
-<head>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Charmonman" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
-    <link rel="shortcut icon" href="https://sguru.org/wp-content/uploads/2018/01/best-instagram-logo-download-here-15.png">
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
-  
-
-
-
-
- 
-
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
- 
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
-</body>
-
-
-
-</html>
+{% endautoescape %}
